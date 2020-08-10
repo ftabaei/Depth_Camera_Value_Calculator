@@ -11,6 +11,7 @@ class Slider {
   int range;
   String name;
   boolean over = false;
+  boolean stay = false;
 
 
   Slider (String tempText, int valTemp, int tempMin, int tempMax, float tempX, float tempY) {
@@ -28,10 +29,10 @@ class Slider {
 
   void update () {
 
-    if ((over) && (mousePressed)) {
+    if (over && mousePressed) {
       sliderPos = mouseX;
       value = (int) map(sliderPos, x, x + sliderLength, min, max);
-
+      stay = true;
 
       if (value <= min) {
         value = min;
@@ -43,15 +44,22 @@ class Slider {
         over = false;
         sliderPos = x + sliderLength;
       }
+    } else {
+      stay = false;
     }
 
     if (mouseX > sliderPos - (slider_width)/2 && mouseX < sliderPos + (slider_width)/2 &&
-        mouseY > y - (slider_height)/2 + height/13 && mouseY < y + (slider_height)/2 + height/13) {
+      mouseY > y - (slider_height)/2 + height/13 && mouseY < y + (slider_height)/2 + height/13) {
       fill(200);
       over = true;
     } else {
       fill(255);
       over = false;
+    }
+    if (mousePressed && !stay) {
+      over = false;
+    } else if (mousePressed && stay) {
+      over = true;
     }
   }
 
